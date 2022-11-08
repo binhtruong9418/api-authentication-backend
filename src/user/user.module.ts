@@ -9,11 +9,10 @@ import { AuthModule } from '../auth/auth.module';
 import { AuthService } from '../auth/auth.service';
 import { JwtService } from '@nestjs/jwt';
 import { BlockchainService } from '../blockchain/blockchain.service';
-import { SendMailService } from '../config/send-mail';
 
 @Module({
   controllers: [UserController],
-  providers: [UserService, UserRepository, AuthService, JwtService, BlockchainService, SendMailService],
+  providers: [UserService, UserRepository, AuthService, JwtService, BlockchainService],
   imports: [MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]), PassportModule.register({ session: true }), AuthModule],
 })
 export class UserModule {}

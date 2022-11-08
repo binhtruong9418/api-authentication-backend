@@ -8,7 +8,6 @@ import { AuthService } from '../auth/auth.service';
 import { Response } from 'express';
 import { BlockchainService } from '../blockchain/blockchain.service';
 import { Logger} from '@nestjs/common';
-import { SendMailService } from '../config/send-mail';
 
 @Injectable()
 export class UserService {
@@ -17,7 +16,6 @@ export class UserService {
     private readonly userRepository: UserRepository,
     private readonly authService: AuthService,
     private readonly blockchainService: BlockchainService,
-    private readonly sendMailService: SendMailService,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<UserResponse> {
@@ -118,32 +116,6 @@ export class UserService {
     }
 
     return await this.authService.createAccessToken(oldUser);
-  }
-
-  async getVerifyEmailCode(user: UserDocument) {
-    if(user.verifiedEmail) {
-      throw new BadRequestException('Email already verified');
-    }
-
-    const code = this.randomAlphanumeric(6);
-    user.verifiedEmailCode = code;
-    await this.userRepository.update(user);
-    this.sendMailService.sendMail(user.email, code);
-    return true;
-  }
-
-  async verifyEmail(user: UserDocument, code: string) {
-    if (user.verifiedEmail) {
-      throw new BadRequestException('Email already verified');
-    }
-
-    if (user.verifiedEmailCode !== code) {
-      throw new BadRequestException('Invalid code');
-    }
-
-    user.verifiedEmail = true;
-    await this.userRepository.update(user);
-    return true;
   }
 
   getAddress = async (user: UserDocument) => {

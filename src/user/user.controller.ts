@@ -56,22 +56,6 @@ export class UserController {
     );
   }
 
-  @ApiOperation({ summary: "Get verify email code" })
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
-  @Get('get-verify-email-code')
-  async getVerifyEmailCode(@GetUser() user: any) {
-    return await this.userService.getVerifyEmailCode(user);
-  }
-
-  @ApiOperation({ summary: "Verify email" })
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
-  @Put('verify-email')
-  async verifyEmail(@GetUser() user: any, @Body() verifyEmailDto: VerifyEmailDto) {
-    return await this.userService.verifyEmail(user, verifyEmailDto.code);
-  }
-
   @ApiOperation({ summary: "Get address" })
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
